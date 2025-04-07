@@ -1,0 +1,173 @@
+/* Animations générales */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Styles de base */
+.page-transition {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.card-animation {
+  animation: slideUp 0.4s ease-out;
+}
+
+/* Styles pour ParkingCard */
+.parking-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.parking-card:hover {
+  transform: translateY(-4px);
+}
+
+.parking-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.parking-image img {
+  transition: transform 0.5s ease;
+}
+
+.parking-image:hover img {
+  transform: scale(1.05);
+}
+
+.thumbnail-gallery {
+  transition: opacity 0.3s ease;
+}
+
+.parking-card:hover .thumbnail-gallery {
+  opacity: 1;
+}
+
+/* Styles pour ParkingSpot */
+.spot-grid {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+  perspective: 1000px;
+}
+
+.parking-spot {
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.parking-spot:hover:not(.disabled) {
+  transform: translateZ(10px);
+}
+
+.parking-spot.selected {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+
+/* Styles pour PaymentPage */
+.payment-option {
+  transition: all 0.3s ease;
+}
+
+.payment-option:hover:not(.selected) {
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+.payment-option.selected {
+  animation: selectPop 0.3s ease;
+}
+
+@keyframes selectPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* Loading animations */
+.loading-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(226, 232, 240, 0.6) 25%,
+    rgba(226, 232, 240, 0.9) 50%,
+    rgba(226, 232, 240, 0.6) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Hero section gradient animation */
+.hero-gradient {
+  background: linear-gradient(
+    45deg,
+    #2563eb,
+    #3b82f6,
+    #60a5fa,
+    #3b82f6,
+    #2563eb
+  );
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Responsive design adjustments */
+@media (max-width: 640px) {
+  .parking-card {
+    margin-bottom: 1rem;
+  }
+  
+  .spot-grid {
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .thumbnail-gallery {
+    display: none;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .dark-mode-support {
+    --bg-primary: #1a1a1a;
+    --text-primary: #ffffff;
+    --border-color: #333333;
+  }
+} 
