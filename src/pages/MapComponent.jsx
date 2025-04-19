@@ -3,19 +3,15 @@ import axios from 'axios';
 import LocationForm from '../components/map/LocationForm';
 import MapView from '../components/map/MapView';
 
-
 const apiKey = '40fcbde3fd7c42faae8b8e189eb10ce9'; // Your API key
 
 const MapComponent = () => {
   const [location, setLocation] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
   const [searchedCoords, setSearchedCoords] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [locationError, setLocationError] = useState('');
   const debounceTimer = useRef(null);
-  
 
   const fetchLocation = async (query) => {
     const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${apiKey}`;
@@ -32,13 +28,12 @@ const MapComponent = () => {
     }
   };
 
-  const handleLocationInput = (e) => {
-    const inputLocation = e.target.value;
-    setLocation(inputLocation);
-    if (inputLocation.length > 3) {
+  const handleLocationSelect = (selectedLocation) => {
+    setLocation(selectedLocation);
+    if (selectedLocation.length > 3) {
       clearTimeout(debounceTimer.current);
       debounceTimer.current = setTimeout(() => {
-        fetchLocation(inputLocation);
+        fetchLocation(selectedLocation);
       }, 4000);
     }
   };
@@ -58,32 +53,23 @@ const MapComponent = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setMessage('Search completed successfully!');
-    }, 2000);
-  };
-
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <LocationForm
-        location={location}
-        handleLocationInput={handleLocationInput}
-        handleLocationDetect={handleLocationDetect}
-        locationError={locationError}
-        date={date}
-        setDate={setDate}
-        time={time}
-        setTime={setTime}
-        handleSubmit={handleSubmit}
-        isLoading={isLoading}
-        message={message}
-      />
+      <div style={{ width: '30%', padding: '20px' }}>
+        <LocationForm onLocationSelect={handleLocationSelect} />
+        {locationError && <p style={{ color: 'red' }}>{locationError}</p>}
+        <button 
+          onClick={handleLocationDetect}
+          style={{ marginTop: '10px', padding: '8px 16px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px' }}
+        >
+          Detect My Location
+        </button>
+      </div>
       <div style={{ width: '70%', zIndex: 10, height: '92%', marginTop: '50px' }}>
-        <MapView searchedCoords={searchedCoords} location={location} />
+        <MapView 
+          locations={searchedCoords ? [{ lat: searchedCoords[0], lng: searchedCoords[1], name: location }] : []}
+          center={searchedCoords ? { lat: searchedCoords[0], lng: searchedCoords[1] } : { lat: 0, lng: 0 }}
+        />
       </div>
     </div>
   );

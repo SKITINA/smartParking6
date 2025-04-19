@@ -1,38 +1,352 @@
-.App {
-  text-align: center;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Leaflet CSS */
+@import 'leaflet/dist/leaflet.css';
+
+/* Variables globales */
+:root {
+  --primary-color: #2563eb;
+  --secondary-color: #1e40af;
+  --accent-color: #3b82f6;
+  --background-color: #f8fafc;
+  --text-color: #1e293b;
+  --error-color: #ef4444;
+  --success-color: #22c55e;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Reset et styles de base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.5;
 }
 
-.App-header {
-  background-color: #282c34;
+/* Layout principal */
+.app-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* Header */
+.header {
+  background-color: white;
+  padding: 1rem 2rem;
+  box-shadow: var(--box-shadow);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+/* Contenu principal */
+.main-content {
+  margin-top: 4rem;
+  padding: 2rem;
+  flex: 1;
+}
+
+/* Carte interactive */
+.map-container {
+  height: 500px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+/* Filtres */
+.filters-container {
+  background: white;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+.filter-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Formulaire de réservation */
+.booking-form {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+}
+
+/* Boutons */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.btn-primary:hover {
+  background-color: var(--secondary-color);
 }
 
-@keyframes App-logo-spin {
+.btn-secondary {
+  background-color: white;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--background-color);
+}
+
+/* Détection de plaque */
+.plate-detection {
+  text-align: center;
+  padding: 2rem;
+}
+
+.webcam-container {
+  max-width: 500px;
+  margin: 0 auto;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+}
+
+/* Paiement */
+.payment-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+/* Confirmation */
+.confirmation-container {
+  text-align: center;
+  padding: 2rem;
+}
+
+.confirmation-icon {
+  font-size: 4rem;
+  color: var(--success-color);
+  margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
+
+  .map-container {
+    height: 300px;
+  }
+
+  .filter-group {
+    flex-direction: column;
+  }
+
+  .booking-form {
+    padding: 1rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Navigation styles */
+.nav {
+  @apply flex justify-between items-center px-8 py-4 bg-white shadow-md;
+}
+
+.nav-logo {
+  @apply text-primary text-2xl font-bold no-underline;
+}
+
+.nav-links {
+  @apply flex gap-8;
+}
+
+.nav-link {
+  @apply text-gray-700 no-underline font-medium hover:text-primary transition-colors;
+}
+
+.nav-buttons {
+  @apply flex gap-4;
+}
+
+.upload-section {
+  @apply max-w-2xl mx-auto p-8;
+}
+
+.upload-title {
+  @apply text-4xl text-gray-800 mb-4;
+}
+
+.upload-subtitle {
+  @apply text-gray-600 mb-8;
+}
+
+.upload-area {
+  @apply border-2 border-dashed border-gray-300 p-8 rounded-lg mb-8 cursor-pointer transition-colors hover:border-primary;
+}
+
+.tips-section {
+  @apply bg-blue-50 p-4 rounded-lg text-left;
+}
+
+.tips-title {
+  @apply text-accent mb-4;
+}
+
+.tips-list {
+  @apply list-none p-0;
+}
+
+.tips-list li {
+  @apply mb-2 text-gray-700 flex items-center;
+}
+
+.tips-list li:before {
+  content: "•";
+  @apply text-accent mr-2;
+}
+
+/* Map styles */
+.leaflet-container {
+  @apply h-full w-full;
+}
+
+.parking-marker {
+  @apply bg-primary text-white px-2 py-1 rounded-full text-sm;
+}
+
+/* Image preview styles */
+.image-preview {
+  @apply max-w-full h-auto rounded-lg shadow-md mb-4;
+}
+
+.preview-container {
+  @apply relative border border-gray-200 rounded-lg p-4 mb-8;
+}
+
+.preview-actions {
+  @apply flex gap-4 justify-center mt-4;
+}
+
+/* Footer styles */
+.footer {
+  @apply bg-secondary text-white py-12 px-8;
+}
+
+.footer-content {
+  @apply grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl mx-auto;
+}
+
+.footer-section h3 {
+  @apply text-white mb-4;
+}
+
+.footer-links {
+  @apply list-none p-0;
+}
+
+.footer-links li {
+  @apply mb-2;
+}
+
+.footer-links a {
+  @apply text-gray-300 no-underline hover:text-blue-400 transition-colors;
+}
+
+.app-store-buttons {
+  @apply flex gap-4 mt-4;
+}
+
+.app-store-buttons img {
+  @apply h-10 cursor-pointer;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .nav {
+    @apply flex-col;
+  }
+  
+  .nav-links {
+    @apply my-4;
+  }
+  
+  .footer-content {
+    @apply grid-cols-1;
   }
 }

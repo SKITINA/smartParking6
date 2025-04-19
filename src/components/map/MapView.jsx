@@ -1,13 +1,29 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const MapView = ({ locations, center }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markersRef = useRef([]);
+  const [isGoogleMapsLoaded, setIsGoogleMapsLoaded] = useState(false);
 
   useEffect(() => {
+    // Check if Google Maps is loaded
+    const checkGoogleMaps = () => {
+      if (window.google && window.google.maps) {
+        setIsGoogleMapsLoaded(true);
+      } else {
+        setTimeout(checkGoogleMaps, 100);
+      }
+    };
+
+    checkGoogleMaps();
+  }, []);
+
+  useEffect(() => {
+    if (!isGoogleMapsLoaded) return;
+
     // Initialize map
-    if (window.google && !mapInstance.current) {
+    if (!mapInstance.current) {
       mapInstance.current = new window.google.maps.Map(mapRef.current, {
         center: center || { lat: 0, lng: 0 },
         zoom: 12,
@@ -32,8 +48,8 @@ const MapView = ({ locations, center }) => {
           content: `
             <div class="p-2">
               <h3 class="font-bold">${location.name}</h3>
-              <p>Available spots: ${location.availableSpots}/${location.totalSpots}</p>
-              <p>Price: $${location.pricePerHour}/hour</p>
+              <p>Available spots: ${location.availableSpots || 'N/A'}/${location.totalSpots || 'N/A'}</p>
+              <p>Price: $${location.pricePerHour || 'N/A'}/hour</p>
             </div>
           `,
         });
@@ -45,7 +61,11 @@ const MapView = ({ locations, center }) => {
         markersRef.current.push(marker);
       });
     }
-  }, [locations, center]);
+  }, [locations, center, isGoogleMapsLoaded]);
+
+  if (!isGoogleMapsLoaded) {
+    return <div className="w-full h-[500px] rounded-lg shadow-md flex items-center justify-center">Loading map...</div>;
+  }
 
   return (
     <div
